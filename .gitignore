@@ -1,3 +1,6 @@
+# Ignored Files
+printhello.*
+
 # Prerequisites
 *.d
 
