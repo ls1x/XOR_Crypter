@@ -49,6 +49,7 @@ int main(int argc, char * argv[]){
 			printf("0x%x ",encMsg[i]);
 		}
 		printf("\n");
+		free(encMsg);
 	} else {
 		printf("Key and message are required arguments.\n");
 		print_usage(argv);
