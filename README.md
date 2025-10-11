@@ -19,4 +19,5 @@ The current version:
 
 ## Usage
 
-- `./xor_crypter -k <KEY> -m <Message>`
+- `./xor_crypter -k [KEY] -m [MESSAGE] --ml [MSG_LENGTH] --kl [KEY_LENGTH]`
+- `./xor_crypter -k [KEY] -m [HEX] --ml [MSG_LENGTH] --kl [KEY_LENGTH] -d [DECRYPT]`
