@@ -6,7 +6,7 @@
 
 char * XOR(char * message, char * key, int msgLength, int keyLength){
 	char * out = NULL;
-	out = calloc(msgLength,sizeof(char));
+	out = calloc(msgLength+1,sizeof(char));
 	if (out == NULL){
 		printf("The allocator failed (out).\n");
 		exit(EXIT_FAILURE);
@@ -108,6 +108,7 @@ int main(int argc, char * argv[]){
 			// Cleanup 
 			free(arr);
 			free(arrChar);
+			free(decMsg);
 		}
 	} else {
 		printf("Key, message and their respective sizes are required arguments.\n");
