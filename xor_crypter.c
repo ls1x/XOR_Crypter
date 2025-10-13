@@ -18,8 +18,12 @@ char * XOR(char * message, char * key, int msgLength, int keyLength){
 }
 
 void print_usage(char * argv[]){
-	printf("%s -k [KEY] -m [MESSAGE] --ml [MSG_LENGTH] --kl [KEY_LENGTH]\n", argv[0]);
-	printf("%s -k [KEY] -m [HEX] --ml [MSG_LENGTH] --kl [KEY_LENGTH] -d [DECRYPT]\n", argv[0]);
+	printf("XOR_Crypter - Staging v1.0\n");
+	printf("%s [-h], [--help]: Prints this.\n", argv[0]);
+	printf("%s [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.\n", argv[0]);
+	printf("%s [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.\n", argv[0]);
+	printf("You can also pass the parameter [--debug].\n");
+	printf("This enables you to see the size of the key and message.\n");
 }
 
 void print_encrypted(char * message, int size){
@@ -35,15 +39,19 @@ int main(int argc, char * argv[]){
 	char * keyLengthChar = NULL;
 	char * msg = NULL;
 	char * msgLengthChar = NULL;
+	bool isDebug = false;
 	bool toDecrypt = false;
 
 	static struct option long_options[] = {
-    	{ "kl", 1, NULL, 'b' },
-    	{ "ml", 1, NULL, 'a' },
-    	{ 0, 0, 0, 0}};
+    	{ "debug", 0, NULL, 'a' },
+    	{ "help", 0, NULL, 'h' },
+	{ 0, 0, 0, 0}};
 
-	while ((c = getopt_long(argc,argv,"k:m:d", long_options, NULL)) != -1){
+	while ((c = getopt_long(argc, argv, "k:m:dh", long_options, NULL)) != -1){
 		switch (c){
+			case 'h':
+				print_usage(argv);
+				return 0;
 			case 'k':
 				key = optarg;
 				break;
@@ -54,10 +62,7 @@ int main(int argc, char * argv[]){
 				toDecrypt = true;
 				break;
 			case 'a':
-				msgLengthChar = optarg;
-				break;
-			case 'b':
-				keyLengthChar = optarg;
+				isDebug = true;
 				break;
 			case '?':
 				break;
@@ -67,20 +72,42 @@ int main(int argc, char * argv[]){
 		}
 	}
 
-	if (key && msg && msgLengthChar && keyLengthChar){
+	if (key && msg){
 		// Preparation
 		char *endptr = NULL;
 		int msgLength = 0;
-		msgLength = strtol(msgLengthChar, &endptr, 10);
 		int keyLength = 0;
-		keyLength = strtol(keyLengthChar, &endptr, 10);
-		
+		int j = 0;
+		while(key[j] != '\0'){
+			keyLength++;
+			j++;
+		}
+		j = 0;
 		if (toDecrypt == false){
+			while(msg[j] != '\0'){
+				msgLength++;
+				j++;
+			}
+			if (isDebug == true){
+				printf("msgLength: %d\n", msgLength);
+				printf("keyLength: %d\n", keyLength);
+			}
 			char * encMsg = NULL;
 			encMsg = XOR(msg, key, msgLength, keyLength);
 			print_encrypted(encMsg, msgLength);
 			free(encMsg);
 		} else {
+			// Counting msgLength
+			while(msg[j] != '\0'){
+				if (msg[j] == 'x'){
+					msgLength++;
+				}
+				j++;
+			}
+			if (isDebug == true){
+				printf("msgLength: %d\n", msgLength);
+				printf("keyLength: %d\n", keyLength);
+			}
 			// Prepare intermediate array
 			int * arr = calloc(msgLength, sizeof(int));
 			if (arr == NULL){
@@ -108,11 +135,12 @@ int main(int argc, char * argv[]){
 			// Cleanup 
 			free(arr);
 			free(arrChar);
+
 			free(decMsg);
 		}
 	} else {
-		printf("Key, message and their respective sizes are required arguments.\n");
-		print_usage(argv);
+		printf("Key and message are required arguments.\n");
+		printf("Try %s --help.\n", argv[0]);
 	}
 
 	return EXIT_SUCCESS;
