@@ -18,8 +18,12 @@ char * XOR(char * message, char * key, int msgLength, int keyLength){
 }
 
 void print_usage(char * argv[]){
-	printf("%s -k [KEY] -m [MESSAGE] --ml [MSG_LENGTH] --kl [KEY_LENGTH]\n", argv[0]);
-	printf("%s -k [KEY] -m [HEX] --ml [MSG_LENGTH] --kl [KEY_LENGTH] -d [DECRYPT]\n", argv[0]);
+	printf("XOR_Crypter - Staging v1.0\n");
+	printf("%s [-h], [--help]: Prints this.\n", argv[0]);
+	printf("%s [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.\n", argv[0]);
+	printf("%s [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.\n", argv[0]);
+	printf("You can also pass the parameter [--debug].\n");
+	printf("This enables you to see the size of the key and message.\n");
 }
 
 void print_encrypted(char * message, int size){
@@ -40,10 +44,14 @@ int main(int argc, char * argv[]){
 
 	static struct option long_options[] = {
     	{ "debug", 0, NULL, 'a' },
-    	{ 0, 0, 0, 0}};
+    	{ "help", 0, NULL, 'h' },
+	{ 0, 0, 0, 0}};
 
-	while ((c = getopt_long(argc, argv, "k:m:d", long_options, NULL)) != -1){
+	while ((c = getopt_long(argc, argv, "k:m:dh", long_options, NULL)) != -1){
 		switch (c){
+			case 'h':
+				print_usage(argv);
+				return 0;
 			case 'k':
 				key = optarg;
 				break;
@@ -131,8 +139,8 @@ int main(int argc, char * argv[]){
 			free(decMsg);
 		}
 	} else {
-		printf("Key, message and their respective sizes are required arguments.\n");
-		print_usage(argv);
+		printf("Key and message are required arguments.\n");
+		printf("Try %s --help.\n", argv[0]);
 	}
 
 	return EXIT_SUCCESS;
