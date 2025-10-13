@@ -35,14 +35,14 @@ int main(int argc, char * argv[]){
 	char * keyLengthChar = NULL;
 	char * msg = NULL;
 	char * msgLengthChar = NULL;
+	bool isDebug = false;
 	bool toDecrypt = false;
 
 	static struct option long_options[] = {
-    	{ "kl", 1, NULL, 'b' },
-    	{ "ml", 1, NULL, 'a' },
+    	{ "debug", 0, NULL, 'a' },
     	{ 0, 0, 0, 0}};
 
-	while ((c = getopt_long(argc,argv,"k:m:d", long_options, NULL)) != -1){
+	while ((c = getopt_long(argc, argv, "k:m:d", long_options, NULL)) != -1){
 		switch (c){
 			case 'k':
 				key = optarg;
@@ -54,10 +54,7 @@ int main(int argc, char * argv[]){
 				toDecrypt = true;
 				break;
 			case 'a':
-				msgLengthChar = optarg;
-				break;
-			case 'b':
-				keyLengthChar = optarg;
+				isDebug = true;
 				break;
 			case '?':
 				break;
@@ -67,20 +64,42 @@ int main(int argc, char * argv[]){
 		}
 	}
 
-	if (key && msg && msgLengthChar && keyLengthChar){
+	if (key && msg){
 		// Preparation
 		char *endptr = NULL;
 		int msgLength = 0;
-		msgLength = strtol(msgLengthChar, &endptr, 10);
 		int keyLength = 0;
-		keyLength = strtol(keyLengthChar, &endptr, 10);
-		
+		int j = 0;
+		while(key[j] != '\0'){
+			keyLength++;
+			j++;
+		}
+		j = 0;
 		if (toDecrypt == false){
+			while(msg[j] != '\0'){
+				msgLength++;
+				j++;
+			}
+			if (isDebug == true){
+				printf("msgLength: %d\n", msgLength);
+				printf("keyLength: %d\n", keyLength);
+			}
 			char * encMsg = NULL;
 			encMsg = XOR(msg, key, msgLength, keyLength);
 			print_encrypted(encMsg, msgLength);
 			free(encMsg);
 		} else {
+			// Counting msgLength
+			while(msg[j] != '\0'){
+				if (msg[j] == 'x'){
+					msgLength++;
+				}
+				j++;
+			}
+			if (isDebug == true){
+				printf("msgLength: %d\n", msgLength);
+				printf("keyLength: %d\n", keyLength);
+			}
 			// Prepare intermediate array
 			int * arr = calloc(msgLength, sizeof(int));
 			if (arr == NULL){
@@ -108,6 +127,7 @@ int main(int argc, char * argv[]){
 			// Cleanup 
 			free(arr);
 			free(arrChar);
+
 			free(decMsg);
 		}
 	} else {
