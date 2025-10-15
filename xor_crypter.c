@@ -22,13 +22,12 @@ void print_usage(char * argv[]){
 	printf("%s [-h], [--help]: Prints this.\n", argv[0]);
 	printf("%s [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.\n", argv[0]);
 	printf("%s [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.\n", argv[0]);
-	printf("You can also pass the parameter [--debug].\n");
-	printf("This enables you to see the size of the key and message.\n");
+	printf("%s [--debug] enables debug output (key/message size info).\n", argv[0]);	
 }
 
 void print_encrypted(char * message, int size){
 	for (int i = 0; i < size; i++){
-		printf("\\x%x",message[i]);
+		printf("\\x%02x",message[i]);
 	}
 	printf("\n");
 }
@@ -36,9 +35,7 @@ void print_encrypted(char * message, int size){
 int main(int argc, char * argv[]){
 	int c = 0;
 	char * key = NULL;
-	char * keyLengthChar = NULL;
 	char * msg = NULL;
-	char * msgLengthChar = NULL;
 	bool isDebug = false;
 	bool toDecrypt = false;
 
@@ -83,6 +80,10 @@ int main(int argc, char * argv[]){
 			j++;
 		}
 		j = 0;
+		if (keyLength < 1){
+			printf("KeyLength or msgLength cannot be zero.\n");
+			return 0;
+		}
 		if (toDecrypt == false){
 			while(msg[j] != '\0'){
 				msgLength++;
@@ -135,7 +136,6 @@ int main(int argc, char * argv[]){
 			// Cleanup 
 			free(arr);
 			free(arrChar);
-
 			free(decMsg);
 		}
 	} else {
