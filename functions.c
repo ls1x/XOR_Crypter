@@ -92,7 +92,7 @@ void print_usage(char * argv[]){
         printf("%s [-h], [--help]: Prints this.\n", argv[0]);
         printf("%s [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.\n", argv[0]);
         printf("%s [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.\n", argv[0]);
-        printf("%s [--debug] enables debug output (key/message size info).\n", argv[0]);
+        printf("%s [--debug] enables debug output (key/message size information).\n", argv[0]);
 }
 
 void print_encrypted(char * message, int size){

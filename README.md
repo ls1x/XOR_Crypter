@@ -22,6 +22,4 @@ The current version:
 - `./xor_crypter [-h], [--help]: Prints this.`
 - `./xor_crypter [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.`
 - `./xor_crypter [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.`
-
-- You can also pass the parameter `[--debug]`
-- This enables you to see the size of the key and message.
+- `./xor_crypter [--debug] enables debug output (key/message size information).`
