@@ -1,5 +1,7 @@
 # Ignored Files
 printhello.*
+FLAG
+KEY
 
 # Prerequisites
 *.d
