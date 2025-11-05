@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 char * XOR(char * message, char * key, int msgLength, int keyLength){
 	char * out = NULL;
@@ -20,39 +21,42 @@ int get_length(char * message, char * key, int * msgLengthOut, int * keyLengthOu
 	int i = 0;
 	int keyLength = 0;
 	int msgLength = 0;
-	while(key[i] != '\0'){
-		keyLength++;
-		i++;
-	}
-	
-	i = 0;
-	if (toDecrypt == false){
-		while(message[i] != '\0'){
-			msgLength++;
+	if (*keyLengthOut == 0){
+		while(key[i] != '\0'){
+			keyLength++;
 			i++;
 		}
-	} else {
-		while(message[i] != '\0'){
-			if (message[i] == 'x'){
+		i = 0;
+		if (keyLength < 1){
+			printf("[ERR]: KeyLength cannot be zero.\n");
+			return -1;
+		}
+		*keyLengthOut = keyLength;
+	}	
+	if (*msgLengthOut == 0){
+		if (toDecrypt == false){
+			while(message[i] != '\0'){
 				msgLength++;
+				i++;
 			}
-			i++;
+		} else {
+			while(message[i] != '\0'){
+				if (message[i] == 'x'){
+					msgLength++;
+				}
+				i++;
+			}
 		}
-	}
-	if (msgLength < 1){
-		printf("[ERR]: MsgLength cannot be zero.\n");
-		return -1;
-	}
-	if (keyLength < 1){
-		printf("[ERR]: KeyLength cannot be zero.\n");
-		return -1;
-	}
+		if (msgLength < 1){
+			printf("[ERR]: MsgLength cannot be zero.\n");
+			return -1;
+		}
+		*msgLengthOut = msgLength;
+	}	
 	if (isDebug == true){
-		printf("MsgLength: %d\n", msgLength);
-		printf("KeyLength: %d\n", keyLength);
+		printf("MsgLength: %d\n", *msgLengthOut);
+		printf("KeyLength: %d\n", *keyLengthOut);
 	}
-	*msgLengthOut = msgLength;
-	*keyLengthOut = keyLength;
 	return 0;
 }
 
@@ -95,9 +99,32 @@ int read_file(char * filename, char ** msgOut){
 	}
 	bytesRead = fread(buf, 1, (sizeof(buf) -1), PTR_file);
 	*msgOut = calloc(1, (bytesRead + 1));
-	printf("[+] %d bytes read.\n", bytesRead);
-	//*msgOut = buf;
-	strncpy(*msgOut, buf, bytesRead);
+	if (*msgOut == NULL){
+		perror("[CALLOC-ERR]");
+		return -1;
+	}
+	printf("[+] %d bytes read from %s.\n", bytesRead, filename);
+	memcpy(*msgOut, buf, bytesRead);
+	fclose(PTR_file);
+	return bytesRead;
+}
+
+int output_to_file(char * msg, int msgLength){
+	FILE *PTR_file;
+	char allowed[] = {'1','2','3','4','5','6','7','8','9','0','\0'};
+	char filename[9] = {'o','u','t',0,0,0,0,0,'\0'};
+	unsigned int bytesWritten = 0;
+	srand(time(NULL)); // Seed with current time
+	for (int i = 3; i < 8; i++){
+		filename[i] = allowed[rand() % 10];
+	}
+	PTR_file = fopen(filename, "w");
+	if (PTR_file == NULL){
+		perror("[FOPEN_ERR]");
+		return -1;
+	}
+	bytesWritten = fwrite(msg, 1, msgLength, PTR_file);
+	printf("[+] %d bytes written on file %s.\n", bytesWritten, filename);
 	fclose(PTR_file);
 	return 0;
 }

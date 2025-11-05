@@ -2,6 +2,9 @@
 printhello.*
 FLAG
 KEY
+BREAKPOINTS
+CHECKPOINT
+out*
 
 # Prerequisites
 *.d
