@@ -130,24 +130,26 @@ int output_to_file(char * msg, int msgLength){
 }
 
 void print_usage(char * argv[]){
-        printf("XOR_Crypter - Stable v4.2\n");
+        printf("XOR_Crypter - Stable v5.0\n");
         printf("%s [-h], [--help]: Prints this.\n", argv[0]);
 	printf("%s [-m <MESSAGE>]: Reads message from stdin.\n", argv[0]);
 	printf("%s [-M <FILE>]:    Reads message from file.\n", argv[0]);
-	printf("%s [-k <KEY>]:     Reads message from stdin\n", argv[0]);
+	printf("%s [-k <KEY>]:     Reads message from stdin.\n", argv[0]);
 	printf("%s [-K <FILE>]:    Reads key from file.\n", argv[0]);
         printf("%s [-d DECRYPT]:   Enables decrypt mode.\n", argv[0]);
+        printf("%s [-o OUTPUT]:    Outputs result in a file.\n", argv[0]);
 	printf("%s [--debug]       Enables debug output (key/message size information).\n", argv[0]);
 	printf("[INFO]: Try %s --examples.\n", argv[0]);
 }
 
 void print_examples(char * argv[]){
-	printf("XOR_Crypter - Stable v4.2\n");
+	printf("XOR_Crypter - Stable v5.0\n");
         printf("%s [-e], [--examples]: Prints this.\n", argv[0]);
-        printf("%s [-k <KEY>]  [-m <MESSAGE>]:  Encrypts message using key.\n", argv[0]);
-        printf("%s [-k <KEY>]  [-m <HEX>] [-d]: Decrypts message using key.\n", argv[0]);
-	printf("%s [-k <KEY>]  [-M <FILE>]:     Encrypts the file and show output on stdout.\n", argv[0]);
-	printf("%s [-K <FILE>] [-M <FILE>]:     Import key and file from different files.\n", argv[0]);
+        printf("%s [-k <KEY>]  [-m <MESSAGE>]:   Encrypts message using key.\n", argv[0]);
+        printf("%s [-k <KEY>]  [-m <HEX>] [-d]:  Decrypts message using key.\n", argv[0]);
+	printf("%s [-k <KEY>]  [-M <FILE>]:      Encrypts the file and show output on stdout.\n", argv[0]);
+	printf("%s [-K <FILE>] [-M <FILE>]:      Import key and file from different files.\n", argv[0]);
+	printf("%s [-K <FILE>] [-M <FILE>] [-o]: Outputs the result encryption into a file.\n", argv[0]);
 }
 
 void print_encrypted(char * message, int size){

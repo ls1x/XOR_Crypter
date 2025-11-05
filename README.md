@@ -20,6 +20,11 @@ The current version:
 ## Usage
 
 - `./xor_crypter [-h], [--help]: Prints this.`
-- `./xor_crypter [-k <KEY>] [-m <MESSAGE>]: Encrypts message using key.`
-- `./xor_crypter [-k <KEY>] [-m <HEX>] [-d]: Decrypts message using key.`
+- `./xor_crypter [-m <MESSAGE>]: Reads message from stdin.`
+- `./xor_crypter [-M <FILE>]:    Reads message from file.`
+- `./xor_crypter [-k <KEY>]:     Reads message from stdin.`
+- `./xor_crypter [-K <FILE>]:    Reads key from file.`
+- `./xor_crypter [-d DECRYPT]:   Enables decrypt mode.`
+- `./xor_crypter [-o OUTPUT]:    Outputs result in a file.`
 - `./xor_crypter [--debug] enables debug output (key/message size information).`
+- `./xor_crypter [--examples] Show examples of how to use.`
